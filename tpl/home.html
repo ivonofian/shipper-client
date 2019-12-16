@@ -1,0 +1,100 @@
+{{ define "home" }}
+
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "header" }}
+
+  <style>
+    
+    td, th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even){background-color: #f2f2f2;}
+    
+    tr:hover {background-color: #ddd;}
+    
+    th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #101010;
+      color: white;
+    }
+    </style>
+
+  <body>
+
+    {{ template "navbar" }}
+
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Products</h1>
+        <p class="lead">This is our <strong>Index</strong> page</p>
+        <center>
+        <table id="product">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>SKU</th>
+              <th>Quantity</th>
+              <th>Created</th>
+              <th>Updated</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        <br>
+        <a href="/create">TAMBAH</a>
+      </center>
+      </div>
+
+    </div><!-- /.container -->
+
+    <script>
+      $(document).ready(function(){
+  
+          var showData = $('#show-data');
+          var url = 'http://localhost:8001/products';
+  
+          $.getJSON( url, function (data) {
+              console.log(data);
+  
+              showData.empty();
+  
+              $.each(data, function(i, item) {
+                let date1 = new Date(item.created);
+                let date2 = new Date(item.updated);
+                   $('<tr>').append(
+                      $('<td>').text(item.name),
+                      $('<td>').text(item.sku),
+                      $('<td>').text(item.qty),
+                      $('<td>').text(date1.toLocaleString()),
+                      $('<td>').text(date2.toLocaleString()),
+                      $('<td>').html('<a href="detail?id='+ item.id +'">DETAIL</a> | <a href="edit?id='+ item.id +'">EDIT</a> | <a href="delete?id='+ item.id +'">DELETE</a>')
+                  )
+                  .appendTo('#product tbody');
+
+
+              });
+  
+          });
+
+          $(".delete").click(function(e) {
+            e.preventDefault(); // if desired...
+            console.log($(this).attr("data"))
+          });
+
+      });
+      
+  
+  </script>
+
+    {{ template "footer" }}
+  </body>
+</html>
+{{ end }}

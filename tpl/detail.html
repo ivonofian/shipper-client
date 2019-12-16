@@ -1,0 +1,88 @@
+{{ define "detail" }}
+
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "header" }}
+
+  <style>
+    
+    td, th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even){background-color: #f2f2f2;}
+    
+    tr:hover {background-color: #ddd;}
+    
+    th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #101010;
+      color: white;
+    }
+    </style>
+
+  <body>
+
+    {{ template "navbar" }}
+
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Product Detail</h1>
+        <center>
+        <table id="product">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>SKU</th>
+              <th>Quantity</th>
+              <th>Created</th>
+              <th>Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        <br>
+        <a href="/">HOME</a> | <a href="/create">TAMBAH</a>
+      </center>
+      </div>
+
+    </div><!-- /.container -->
+
+    <script>
+      $(document).ready(function(){
+  
+        //   var showData = $('#product');
+          var url = 'http://localhost:8001/products';
+          var urlParams = new URLSearchParams(window.location.search);
+
+          $.getJSON( url+"/"+urlParams.get('id'), function (data) {
+              console.log(data);
+  
+            //   showData.empty();
+
+                let date1 = new Date(data.created);
+                let date2 = new Date(data.updated);
+                   $('<tr>').append(
+                      $('<td>').text(data.name),
+                      $('<td>').text(data.sku),
+                      $('<td>').text(data.qty),
+                      $('<td>').text(date1.toLocaleString()),
+                      $('<td>').text(date2.toLocaleString()),
+                  )
+                  .appendTo('#product tbody');
+  
+          });
+      });
+      
+  
+  </script>
+
+    {{ template "footer" }}
+  </body>
+</html>
+{{ end }}

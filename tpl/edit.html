@@ -1,0 +1,116 @@
+{{ define "edit" }}
+
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "header" }}
+
+  <style>
+    input[type=text], select {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    input[type=submit] {
+      width: 100%;
+      background-color: #010101;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    input[type=submit]:hover {
+      background-color: #010101;
+    }
+    
+    /* div {
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+    } */
+    </style>
+
+  <body>
+
+    {{ template "navbar" }}
+
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Add Product</h1>
+        <center>
+            <form id="products">
+                <input type="text" id="name" name="name" placeholder="Name" />
+                <input type="text" id="sku" name="sku" placeholder="SKU" />
+                <input type="text" id="qty" name="qty" placeholder="Quantity" />
+            
+                <button type="submit">Submit</button>
+            </form>
+            
+            <div id="target"></div>
+        <br>
+        <a href="/">HOME</a>
+      </center>
+      </div>
+
+    </div><!-- /.container -->
+
+    <script>
+        (function($){
+            var url = 'http://localhost:8001/products';
+            var urlParams = new URLSearchParams(window.location.search);
+
+            $.getJSON( url+"/"+urlParams.get('id'), function (data) {
+            console.log(data);
+            $("#name").val(data.name);
+            $("#sku").val(data.sku);
+            $("#qty").val(data.qty);
+        });
+        })(jQuery);
+
+        $("#products").submit(function(e) {
+
+            e.preventDefault();
+
+                var product = {
+                    name:$("#name").val(),
+                    sku:$("#sku").val(),
+                    qty:$("#qty").val()
+                }
+                console.log(JSON.stringify(product))
+
+                var url = 'http://localhost:8001/products';
+                var urlParams = new URLSearchParams(window.location.search);
+                $('#target').html('sending..');
+    
+                $.ajax({
+                    url: url+"/"+urlParams.get('id'),
+                    type: 'put',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(product),
+                    success: function(data, status) {
+                    },
+                    statusCode: {
+                        200: function() {
+                            alert("Berhasil Update");
+                            window.location.replace("http://localhost:9001/");
+                        }
+                    }
+                });
+
+        });
+        
+    </script>
+
+    {{ template "footer" }}
+  </body>
+</html>
+{{ end }}
