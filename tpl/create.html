@@ -5,7 +5,7 @@
   {{ template "header" }}
 
   <style>
-    input[type=text], select {
+    input[type=text], input[type=number], select {
       width: 100%;
       padding: 12px 20px;
       margin: 8px 0;
@@ -49,7 +49,7 @@
             <form id="products">
                 <input type="text" id="name" name="name" placeholder="Name" />
                 <input type="text" id="sku" name="sku" placeholder="SKU" />
-                <input type="text" id="qty" name="qty" placeholder="Quantity" />
+                <input type="number" id="qty" name="qty" placeholder="Quantity" />
             
                 <button type="submit">Submit</button>
             </form>
@@ -70,7 +70,7 @@
         var product = {
                     name:$("#name").val(),
                     sku:$("#sku").val(),
-                    qty:$("#qty").val()
+                    qty:parseInt($("#qty").val()),
                 }
                 console.log(JSON.stringify(product))
 
